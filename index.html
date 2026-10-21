@@ -1,187 +1,180 @@
 
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-    <!-- Pengaturan karakter agar teks tampil dengan benar -->
-    <meta charset="UTF-8">
+  <meta charset="UTF-8">
 
-    <!-- Membuat tampilan menyesuaikan layar HP, tablet, dan laptop -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Mengatur tampilan agar responsif di HP dan laptop -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Judul yang muncul pada tab browser -->
-    <title>MenuKita - Menu Digital</title>
+  <meta name="theme-color" content="#173f35">
+  <meta name="description" content="Menu digital cafe, pilih makanan dan minuman favoritmu.">
 
-    <!-- Menghubungkan file desain CSS -->
-    <link rel="stylesheet" href="style.css">
+  <title>DigiMenu | Menu Digital Cafe</title>
 
-    <!-- Memuat JavaScript setelah HTML selesai dibaca -->
-    <script src="script.js" defer></script>
+  <!-- Menghubungkan file desain CSS -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Menghubungkan JavaScript setelah HTML selesai dibaca -->
+  <script src="script.js" defer></script>
 </head>
-
 <body>
 
-    <!-- =====================================
-         1. HEADER WEBSITE
-         ===================================== -->
-    <header class="header">
-        <div class="container header-inner">
+  <!-- HEADER: identitas cafe dan navigasi -->
+  <header class="header">
+    <div class="container header-inner">
+      <a class="brand" href="#" aria-label="DigiMenu beranda">
+        <span class="brand-icon">D</span>
+        <span>DigiMenu</span>
+      </a>
 
-            <!-- Logo atau nama website -->
-            <a href="#" class="logo">
-                Menu<span>Kita.</span>
-            </a>
+      <nav class="navigation" aria-label="Navigasi utama">
+        <a href="#menu">Daftar Menu</a>
+        <a href="#tentang">Tentang</a>
+        <button type="button" class="cart-nav" id="buka-keranjang">
+          Keranjang <span id="badge-keranjang">0</span>
+        </button>
+      </nav>
+    </div>
+  </header>
 
-            <!-- Keterangan website -->
-            <p>Menu digital kafe dan restoran</p>
+  <main>
+    <!-- HERO: judul dan pengenalan website -->
+    <section class="hero">
+      <div class="container hero-content">
+        <span class="eyebrow">MENU DIGITAL • PRAKTIS • MUDAH</span>
+        <h1>Nikmati menu favoritmu, <span>lebih mudah.</span></h1>
+        <p>
+          Temukan makanan dan minuman favoritmu, pilih pesanan,
+          lalu lihat total harga secara langsung.
+        </p>
+        <a href="#menu" class="button button-light">Lihat Menu ↓</a>
+      </div>
+    </section>
 
+    <!-- KATALOG MENU -->
+    <section class="section container" id="menu">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">PILIHAN KAMI</span>
+          <h2>Jelajahi Menu</h2>
+          <p>Pilih menu sesuai selera kamu.</p>
         </div>
-    </header>
+      </div>
 
+      <!-- Kolom pencarian dan pilihan kategori -->
+      <div class="menu-tools">
+        <label class="search-box">
+          <span aria-hidden="true">⌕</span>
+          <input
+            type="search"
+            id="pencarian"
+            placeholder="Cari nasi goreng, kopi..."
+            aria-label="Cari nama menu"
+          >
+        </label>
 
-    <!-- =====================================
-         2. KONTEN UTAMA WEBSITE
-         ===================================== -->
-    <main class="container">
+        <label class="category-box">
+          <span class="sr-only">Pilih kategori menu</span>
+          <select id="filter-kategori">
+            <option value="Semua">Semua kategori</option>
+            <option value="Makanan">Makanan</option>
+            <option value="Minuman">Minuman</option>
+            <option value="Camilan">Camilan</option>
+          </select>
+        </label>
+      </div>
 
-        <!-- Bagian sambutan -->
-        <section class="hero">
-            <p class="eyebrow">SELAMAT DATANG</p>
+      <!-- Informasi jumlah hasil pencarian -->
+      <p id="info-menu" class="info-menu" aria-live="polite"></p>
 
-            <h1>Temukan Menu Favoritmu</h1>
+      <!-- JavaScript akan membuat kartu produk di dalam elemen ini -->
+      <div id="daftar-menu" class="menu-grid"></div>
+    </section>
 
-            <p>
-                Pilih makanan dan minuman favoritmu,
-                lalu hitung pesanan dengan mudah.
-            </p>
-        </section>
-
-
-        <!-- =====================================
-             3. DAFTAR MENU
-             ===================================== -->
-        <section class="menu-section">
-
-            <div class="section-heading">
-                <h2>Daftar Menu</h2>
-                <p>Pilih menu yang ingin kamu beli.</p>
-            </div>
-
-            <!-- Kolom untuk mencari menu -->
-            <label for="searchInput" class="visually-hidden">
-                Cari makanan atau minuman
-            </label>
-
-            <input
-                type="search"
-                id="searchInput"
-                class="search-input"
-                placeholder="Cari makanan atau minuman..."
-                autocomplete="off"
-            >
-
-            <!-- Tombol kategori dibuat oleh JavaScript -->
-            <div
-                id="categoryButtons"
-                class="category-buttons"
-                aria-label="Filter kategori menu"
-            ></div>
-
-            <!-- Kartu menu ditampilkan di dalam bagian ini -->
-            <div id="menuGrid" class="menu-grid"></div>
-
-            <!-- Menunjukkan jumlah menu hasil pencarian -->
-            <p
-                id="resultCount"
-                class="result-count"
-                aria-live="polite"
-            ></p>
-
-        </section>
-
-
-        <!-- =====================================
-             4. KERANJANG / PESANAN SAYA
-             ===================================== -->
-        <section class="cart-section">
-
-            <!-- Judul dan jumlah seluruh item dalam pesanan -->
-            <div class="cart-heading">
-                <div>
-                    <h2>Pesanan Saya</h2>
-                    <p>Periksa jumlah dan total harga pesananmu.</p>
-                </div>
-
-                <div class="cart-badge">
-                    <span id="cartCount">0</span>
-                    <span>item</span>
-                </div>
-            </div>
-
-            <!--
-                Pesan ini tampil ketika keranjang masih kosong.
-                JavaScript akan menyembunyikannya jika ada pesanan.
-            -->
-            <div id="cartEmpty" class="cart-empty">
-                <div class="empty-icon" aria-hidden="true">🛒</div>
-                <h3>Pesanan masih kosong</h3>
-                <p>Tekan tombol "Tambah ke Pesanan" pada menu.</p>
-            </div>
-
-            <!--
-                Daftar item pesanan ditampilkan oleh JavaScript.
-                Setiap item memiliki tombol tambah dan kurangi jumlah.
-            -->
-            <div id="cartItems" class="cart-items"></div>
-
-            <!-- Ringkasan harga pesanan -->
-            <div class="cart-summary">
-
-                <div class="summary-row">
-                    <span>Total item</span>
-                    <strong id="summaryCount">0 item</strong>
-                </div>
-
-                <div class="summary-row total-row">
-                    <span>Total harga</span>
-                    <strong id="cartTotal">Rp0</strong>
-                </div>
-
-            </div>
-
-            <!-- Tombol untuk menghapus semua pesanan -->
-            <button
-                type="button"
-                id="clearCartBtn"
-                class="clear-cart-btn"
-                disabled
-            >
-                Kosongkan Pesanan
-            </button>
-
-            <!-- Informasi batasan website -->
-            <p class="cart-note">
-                Catatan: Ringkasan ini hanya menghitung pesanan
-                pada perangkat yang sedang digunakan. Pesanan
-                belum dikirim ke kafe dan belum merupakan pembayaran.
-            </p>
-
-        </section>
-
-    </main>
-
-
-    <!-- =====================================
-         5. FOOTER WEBSITE
-         ===================================== -->
-    <footer class="footer">
-        <div class="container">
-            <h3>MenuKita.</h3>
-            <p>Menu digital yang praktis untuk semua.</p>
-            <p>&copy; 2026 MenuKita</p>
+    <!-- KERANJANG DAN RINGKASAN PESANAN -->
+    <section class="section container" id="keranjang">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">PESANAN KAMU</span>
+          <h2>Keranjang Belanja</h2>
+          <p>Periksa menu dan jumlah pesanan sebelum melanjutkan.</p>
         </div>
-    </footer>
+      </div>
+
+      <div class="cart-layout">
+        <div class="cart-panel">
+          <!-- Daftar item keranjang dibuat oleh JavaScript -->
+          <div id="daftar-keranjang" aria-live="polite"></div>
+
+          <button
+            type="button"
+            id="kosongkan-keranjang"
+            class="button button-outline"
+          >
+            Kosongkan Keranjang
+          </button>
+        </div>
+
+        <!-- Ringkasan harga -->
+        <aside class="summary-panel">
+          <h3>Ringkasan Pesanan</h3>
+
+          <div class="summary-row">
+            <span>Jumlah item</span>
+            <strong id="jumlah-item">0 item</strong>
+          </div>
+
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <strong id="subtotal">Rp0</strong>
+          </div>
+
+          <div class="summary-row summary-total">
+            <span>Total</span>
+            <strong id="total-harga">Rp0</strong>
+          </div>
+
+          <p class="summary-note">
+            Total belum termasuk biaya tambahan jika ada.
+            Pembayaran dikonfirmasi kepada pihak cafe.
+          </p>
+
+          <button
+            type="button"
+            id="tombol-pesan"
+            class="button button-primary button-full"
+          >
+            Pesan via WhatsApp ↗
+          </button>
+        </aside>
+      </div>
+    </section>
+
+    <!-- INFORMASI WEBSITE -->
+    <section class="about-section" id="tentang">
+      <div class="container about-content">
+        <span class="eyebrow">TENTANG DIGIMENU</span>
+        <h2>Menu digital untuk pengalaman yang lebih praktis.</h2>
+        <p>
+          DigiMenu membantu pelanggan melihat daftar menu tanpa
+          harus bergantian menggunakan buku menu fisik.
+          Pilih menu melalui HP atau laptop dengan mudah.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <strong>DigiMenu Cafe</strong>
+      <p>© <span id="tahun"></span> DigiMenu. Menu digital praktis.</p>
+    </div>
+  </footer>
+
+  <!-- Notifikasi ketika produk ditambahkan atau dihapus -->
+  <div id="notifikasi" class="toast" role="status" aria-live="polite"></div>
 
 </body>
-
 </html>
