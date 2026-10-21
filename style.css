@@ -1,4 +1,8 @@
 
+/* =========================================
+   1. WARNA DAN PENGATURAN DASAR
+   ========================================= */
+
 :root {
     --primary: #76513b;
     --primary-dark: #533724;
@@ -7,6 +11,7 @@
     --text: #292521;
     --muted: #77716b;
     --border: #e9e1d8;
+    --danger: #a33131;
 }
 
 * {
@@ -25,6 +30,16 @@ body {
     width: min(1100px, 92%);
     margin: 0 auto;
 }
+
+button,
+input {
+    font: inherit;
+}
+
+
+/* =========================================
+   2. HEADER DAN LOGO
+   ========================================= */
 
 .header {
     background: var(--white);
@@ -56,7 +71,11 @@ body {
     text-align: right;
 }
 
-/* Bagian pembuka */
+
+/* =========================================
+   3. BAGIAN SAMBUTAN
+   ========================================= */
+
 .hero {
     margin: 30px 0;
     padding: clamp(25px, 5vw, 48px);
@@ -83,17 +102,23 @@ body {
     color: #64574c;
 }
 
-/* Daftar menu */
+
+/* =========================================
+   4. JUDUL BAGIAN DAN PENCARIAN
+   ========================================= */
+
 .menu-section {
-    margin-bottom: 55px;
+    margin-bottom: 50px;
 }
 
-.section-heading h2 {
+.section-heading h2,
+.cart-heading h2 {
     margin-bottom: 4px;
     font-size: 28px;
 }
 
-.section-heading p {
+.section-heading p,
+.cart-heading p {
     margin-top: 0;
     color: var(--muted);
 }
@@ -101,7 +126,7 @@ body {
 .search-input {
     display: block;
     width: 100%;
-    padding: 15px;
+    padding: 14px 15px;
     margin: 20px 0;
     border: 1px solid var(--border);
     border-radius: 10px;
@@ -112,9 +137,14 @@ body {
 
 .search-input:focus {
     border-color: var(--primary);
+    box-shadow: 0 0 0 3px #76513b20;
 }
 
-/* Tombol kategori */
+
+/* =========================================
+   5. TOMBOL KATEGORI
+   ========================================= */
+
 .category-buttons {
     display: flex;
     flex-wrap: wrap;
@@ -123,13 +153,12 @@ body {
 }
 
 .category-btn {
-    padding: 10px 17px;
+    padding: 9px 16px;
     border: 1px solid var(--border);
     border-radius: 25px;
     background: var(--white);
     color: var(--text);
     cursor: pointer;
-    font-size: 14px;
 }
 
 .category-btn:hover,
@@ -139,11 +168,18 @@ body {
     border-color: var(--primary);
 }
 
-/* Kartu menu otomatis menyesuaikan layar */
+
+/* =========================================
+   6. KARTU DAFTAR MENU
+   ========================================= */
+
 .menu-grid {
     display: grid;
+
+    /* Jumlah kolom otomatis mengikuti lebar layar */
     grid-template-columns:
         repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+
     gap: 20px;
 }
 
@@ -160,14 +196,14 @@ body {
     box-shadow: 0 8px 22px #00000010;
 }
 
-/* Ilustrasi menu tidak membutuhkan internet */
+/* Ilustrasi berupa emoji agar tidak membutuhkan internet */
 .menu-visual {
-    height: 170px;
+    height: 160px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: #f0e5d7;
-    font-size: 75px;
+    font-size: 70px;
 }
 
 .menu-info {
@@ -205,6 +241,28 @@ body {
     font-weight: bold;
 }
 
+/* Tombol tambah menu ke pesanan */
+.add-btn {
+    width: 100%;
+    margin-top: 15px;
+    padding: 11px 14px;
+    border: none;
+    border-radius: 9px;
+    background: var(--primary);
+    color: var(--white);
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.add-btn:hover:not(:disabled) {
+    background: var(--primary-dark);
+}
+
+.add-btn:disabled {
+    background: #b8b0a8;
+    cursor: not-allowed;
+}
+
 .status {
     padding: 5px 10px;
     border-radius: 20px;
@@ -233,11 +291,200 @@ body {
     padding: 35px 15px;
     border-radius: 12px;
     background: var(--white);
-    text-align: center;
     color: var(--muted);
+    text-align: center;
 }
 
-/* Footer */
+
+/* =========================================
+   7. BAGIAN KERANJANG PESANAN
+   ========================================= */
+
+.cart-section {
+    margin: 40px 0 60px;
+    padding: clamp(18px, 4vw, 30px);
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+}
+
+.cart-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 22px;
+}
+
+.cart-heading h2 {
+    margin-top: 0;
+}
+
+.cart-heading p {
+    margin-bottom: 0;
+    font-size: 14px;
+}
+
+/* Penanda jumlah item */
+.cart-badge {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 13px;
+    border-radius: 25px;
+    background: #efe2d2;
+    color: var(--primary-dark);
+    font-size: 14px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+/* Tampilan ketika pesanan masih kosong */
+.cart-empty {
+    padding: 25px 12px;
+    text-align: center;
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+}
+
+.empty-icon {
+    font-size: 42px;
+}
+
+.cart-empty h3 {
+    margin-bottom: 4px;
+}
+
+.cart-empty p {
+    margin-top: 0;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+/* Daftar setiap pesanan */
+.cart-items {
+    display: grid;
+    gap: 12px;
+}
+
+/* Baris satu item pesanan */
+.cart-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 16px;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.cart-item-info h3 {
+    margin: 0 0 4px;
+    font-size: 16px;
+}
+
+.cart-item-info p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.cart-line-total {
+    color: var(--primary);
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+/* Tombol tambah dan kurangi jumlah */
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.quantity-btn {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--white);
+    color: var(--primary);
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.quantity-btn:hover {
+    background: #efe2d2;
+}
+
+.quantity-number {
+    min-width: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Ringkasan harga */
+.cart-summary {
+    margin-top: 24px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border);
+}
+
+.summary-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 7px 0;
+}
+
+.total-row {
+    margin-top: 8px;
+    padding-top: 15px;
+    border-top: 1px dashed var(--border);
+    font-size: 19px;
+}
+
+.total-row strong {
+    color: var(--primary);
+    font-size: 23px;
+}
+
+/* Tombol mengosongkan keranjang */
+.clear-cart-btn {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    border: 1px solid var(--danger);
+    border-radius: 9px;
+    background: var(--white);
+    color: var(--danger);
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.clear-cart-btn:hover:not(:disabled) {
+    background: #fce5e5;
+}
+
+.clear-cart-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.cart-note {
+    margin-top: 16px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+
+/* =========================================
+   8. FOOTER
+   ========================================= */
+
 .footer {
     padding: 25px 0;
     background: var(--white);
@@ -246,8 +493,8 @@ body {
 }
 
 .footer h3 {
-    color: var(--primary);
     margin-bottom: 5px;
+    color: var(--primary);
 }
 
 .footer p {
@@ -255,7 +502,11 @@ body {
     font-size: 13px;
 }
 
-/* Menyembunyikan label tanpa menghilangkan aksesibilitas */
+
+/* =========================================
+   9. AKSESIBILITAS
+   ========================================= */
+
 .visually-hidden {
     position: absolute;
     width: 1px;
@@ -268,8 +519,12 @@ body {
     border: 0;
 }
 
-/* Pengaturan layar kecil */
-@media (max-width: 480px) {
+
+/* =========================================
+   10. PENYESUAIAN LAYAR HP
+   ========================================= */
+
+@media (max-width: 600px) {
     .header-inner {
         min-height: 65px;
     }
@@ -296,5 +551,35 @@ body {
     .menu-visual {
         height: 180px;
     }
-}
 
+    .cart-item {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 10px;
+    }
+
+    /* Harga per item berpindah ke baris berikutnya */
+    .cart-line-total {
+        grid-column: 1;
+        grid-row: 2;
+        font-size: 14px;
+    }
+
+    .quantity-controls {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+        gap: 7px;
+    }
+
+    .quantity-btn {
+        width: 32px;
+        height: 32px;
+    }
+
+    .total-row {
+        font-size: 16px;
+    }
+
+    .total-row strong {
+        font-size: 19px;
+    }
+}
