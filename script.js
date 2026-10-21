@@ -2,453 +2,632 @@
 "use strict";
 
 /* =========================================
-   1. DATA MENU
-   Semua data disimpan langsung di JavaScript.
-   Tidak menggunakan database.
+   1. KONFIGURASI WEBSITE
+   Ubah nama cafe dan nomor WhatsApp di sini.
+   Nomor memakai kode negara 62 tanpa tanda +.
    ========================================= */
 
-const menus = [
-    {
-        id: 1,
-        name: "Nasi Goreng Spesial",
-        category: "Makanan Berat",
-        price: 18000,
-        description: "Nasi goreng dengan telur dan sayuran.",
-        icon: "🍛",
-        available: true
-    },
-    {
-        id: 2,
-        name: "Mie Goreng",
-        category: "Makanan Berat",
-        price: 15000,
-        description: "Mie goreng gurih dengan sayuran.",
-        icon: "🍜",
-        available: true
-    },
-    {
-        id: 3,
-        name: "Burger Spesial",
-        category: "Makanan Berat",
-        price: 22000,
-        description: "Burger dengan sayuran dan saus spesial.",
-        icon: "🍔",
-        available: true
-    },
-    {
-        id: 4,
-        name: "Kentang Goreng",
-        category: "Camilan",
-        price: 12000,
-        description: "Kentang goreng renyah untuk teman santai.",
-        icon: "🍟",
-        available: false
-    },
-    {
-        id: 5,
-        name: "Es Kopi Susu",
-        category: "Minuman",
-        price: 15000,
-        description: "Perpaduan kopi, susu, dan es.",
-        icon: "🧋",
-        available: true
-    },
-    {
-        id: 6,
-        name: "Matcha Latte",
-        category: "Minuman",
-        price: 18000,
-        description: "Minuman matcha dengan susu yang lembut.",
-        icon: "🍵",
-        available: true
-    }
+const KONFIGURASI = {
+  namaCafe: "DigiMenu Cafe",
+  nomorWhatsApp: "6281234567890"
+};
+
+/* =========================================
+   2. DATA MENU
+   Tambahkan produk baru dengan menyalin format objek.
+   Harga menggunakan angka, bukan teks Rupiah.
+   tersedia: false berarti menu sedang habis.
+   ========================================= */
+
+const menu = [
+  {
+    id: 1,
+    nama: "Nasi Goreng",
+    kategori: "Makanan",
+    deskripsi: "Nasi goreng spesial dengan bumbu pilihan.",
+    harga: 18000,
+    foto: "https://placehold.co/600x400/f0e4d0/173f35?text=Nasi+Goreng",
+    tersedia: true
+  },
+  {
+    id: 2,
+    nama: "Mie Goreng",
+    kategori: "Makanan",
+    deskripsi: "Mie goreng gurih dengan topping lezat.",
+    harga: 15000,
+    foto: "https://placehold.co/600x400/e9dfc8/173f35?text=Mie+Goreng",
+    tersedia: true
+  },
+  {
+    id: 3,
+    nama: "Ayam Geprek",
+    kategori: "Makanan",
+    deskripsi: "Ayam renyah dengan sambal pilihan.",
+    harga: 20000,
+    foto: "https://placehold.co/600x400/f1d8c8/173f35?text=Ayam+Geprek",
+    tersedia: true
+  },
+  {
+    id: 4,
+    nama: "Kentang Goreng",
+    kategori: "Camilan",
+    deskripsi: "Kentang goreng renyah untuk menemani santai.",
+    harga: 12000,
+    foto: "https://placehold.co/600x400/efdfb8/173f35?text=Kentang+Goreng",
+    tersedia: true
+  },
+  {
+    id: 5,
+    nama: "Es Teh",
+    kategori: "Minuman",
+    deskripsi: "Teh manis segar yang cocok diminum kapan saja.",
+    harga: 5000,
+    foto: "https://placehold.co/600x400/d9e8d8/173f35?text=Es+Teh",
+    tersedia: true
+  },
+  {
+    id: 6,
+    nama: "Kopi Susu",
+    kategori: "Minuman",
+    deskripsi: "Perpaduan kopi dan susu yang nikmat.",
+    harga: 12000,
+    foto: "https://placehold.co/600x400/e2d3c4/173f35?text=Kopi+Susu",
+    tersedia: true
+  },
+  {
+    id: 7,
+    nama: "Jus Buah",
+    kategori: "Minuman",
+    deskripsi: "Minuman buah segar untuk menemani makan.",
+    harga: 10000,
+    foto: "https://placehold.co/600x400/e6e8c8/173f35?text=Jus+Buah",
+    tersedia: true
+  },
+  {
+    id: 8,
+    nama: "Roti Bakar",
+    kategori: "Camilan",
+    deskripsi: "Roti panggang dengan topping manis.",
+    harga: 10000,
+    foto: "https://placehold.co/600x400/e9d1b6/173f35?text=Roti+Bakar",
+    tersedia: false
+  }
 ];
 
-
 /* =========================================
-   2. TEMPAT MENYIMPAN PESANAN SEMENTARA
-
-   Contoh:
-   cart[1] = 2 berarti membeli 2 Nasi Goreng.
-   cart[5] = 1 berarti membeli 1 Es Kopi Susu.
-
-   Data ini hanya disimpan selama halaman
-   digunakan dan tidak masuk ke database.
+   3. VARIABEL DAN ELEMEN HTML
+   Keranjang menyimpan ID produk dan jumlahnya.
+   Contoh: { 1: 2, 5: 1 }
+   Artinya 2 nasi goreng dan 1 es teh.
    ========================================= */
 
-const cart = {};
+const keranjang = {};
 
-let activeCategory = "Semua";
-
-
-/* =========================================
-   3. MENGAMBIL ELEMEN HTML
-   JavaScript memakai ID berikut untuk
-   memperbarui tampilan halaman.
-   ========================================= */
-
-const searchInput = document.getElementById("searchInput");
-const categoryButtons = document.getElementById("categoryButtons");
-const menuGrid = document.getElementById("menuGrid");
-const resultCount = document.getElementById("resultCount");
-
-const cartCount = document.getElementById("cartCount");
-const summaryCount = document.getElementById("summaryCount");
-const cartItems = document.getElementById("cartItems");
-const cartEmpty = document.getElementById("cartEmpty");
-const cartTotal = document.getElementById("cartTotal");
-const clearCartBtn = document.getElementById("clearCartBtn");
-
+const elemen = {
+  pencarian: document.getElementById("pencarian"),
+  kategori: document.getElementById("filter-kategori"),
+  daftarMenu: document.getElementById("daftar-menu"),
+  infoMenu: document.getElementById("info-menu"),
+  daftarKeranjang: document.getElementById("daftar-keranjang"),
+  badgeKeranjang: document.getElementById("badge-keranjang"),
+  jumlahItem: document.getElementById("jumlah-item"),
+  subtotal: document.getElementById("subtotal"),
+  totalHarga: document.getElementById("total-harga"),
+  tombolPesan: document.getElementById("tombol-pesan"),
+  kosongkan: document.getElementById("kosongkan-keranjang"),
+  bukaKeranjang: document.getElementById("buka-keranjang"),
+  notifikasi: document.getElementById("notifikasi"),
+  tahun: document.getElementById("tahun")
+};
 
 /* =========================================
-   4. FORMAT HARGA MENJADI RUPIAH
-   Contoh: 18000 menjadi Rp18.000
+   4. FUNGSI PEMBANTU
    ========================================= */
 
-function formatRupiah(price) {
-    return new Intl.NumberFormat("id-ID", {
-        style: "currency",
-        currency: "IDR",
-        maximumFractionDigits: 0
-    }).format(price);
+// Mengubah angka menjadi format mata uang Rupiah.
+function formatRupiah(angka) {
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    maximumFractionDigits: 0
+  }).format(angka);
 }
 
+// Melindungi teks data ketika dimasukkan ke HTML.
+function aman(teks) {
+  return String(teks).replace(/[&<>"']/g, function(karakter) {
+    const pengganti = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    };
 
-/* =========================================
-   5. MEMBUAT TOMBOL KATEGORI
-   Kategori dibuat berdasarkan data menu.
-   ========================================= */
-
-function renderCategories() {
-    const categories = [
-        "Semua",
-        ...new Set(menus.map(menu => menu.category))
-    ];
-
-    categoryButtons.innerHTML = categories.map(category => `
-        <button
-            type="button"
-            class="category-btn ${
-                category === activeCategory ? "active" : ""
-            }"
-            data-category="${category}"
-            aria-pressed="${category === activeCategory}"
-        >
-            ${category}
-        </button>
-    `).join("");
+    return pengganti[karakter];
+  });
 }
 
+// Mengambil produk berdasarkan ID.
+function cariProduk(id) {
+  return menu.find(function(produk) {
+    return produk.id === Number(id);
+  });
+}
+
+// Mengambil seluruh produk yang jumlahnya lebih dari nol.
+function ambilPesanan() {
+  return menu.filter(function(produk) {
+    return Number(keranjang[produk.id]) > 0;
+  });
+}
+
+// Menghitung jumlah seluruh unit barang.
+function hitungJumlahItem() {
+  return ambilPesanan().reduce(function(total, produk) {
+    return total + keranjang[produk.id];
+  }, 0);
+}
+
+// Menghitung total harga semua produk.
+function hitungTotal() {
+  return ambilPesanan().reduce(function(total, produk) {
+    return total + produk.harga * keranjang[produk.id];
+  }, 0);
+}
 
 /* =========================================
-   6. MENAMPILKAN DAFTAR MENU
-   Memproses pencarian, kategori, harga,
-   status, dan tombol tambah pesanan.
+   5. NOTIFIKASI
+   Menampilkan pesan ketika pelanggan berinteraksi.
    ========================================= */
 
-function renderMenus() {
-    const keyword = searchInput.value.trim().toLowerCase();
+let waktuNotifikasi;
 
-    // Menyaring menu berdasarkan pencarian dan kategori.
-    const filteredMenus = menus.filter(menu => {
-        const matchesSearch =
-            menu.name.toLowerCase().includes(keyword) ||
-            menu.category.toLowerCase().includes(keyword) ||
-            menu.description.toLowerCase().includes(keyword);
+function beriNotifikasi(pesan) {
+  elemen.notifikasi.textContent = pesan;
+  elemen.notifikasi.classList.add("show");
 
-        const matchesCategory =
-            activeCategory === "Semua" ||
-            menu.category === activeCategory;
+  clearTimeout(waktuNotifikasi);
 
-        return matchesSearch && matchesCategory;
-    });
+  waktuNotifikasi = setTimeout(function() {
+    elemen.notifikasi.classList.remove("show");
+  }, 2200);
+}
 
-    // Pesan jika menu tidak ditemukan.
-    if (filteredMenus.length === 0) {
-        menuGrid.innerHTML = `
-            <div class="empty-message">
-                <h3>Menu tidak ditemukan</h3>
-                <p>Coba kata kunci lainnya.</p>
-            </div>
-        `;
-    } else {
-        // Membuat kartu untuk setiap menu.
-        menuGrid.innerHTML = filteredMenus.map(menu => {
-            const quantity = cart[menu.id] || 0;
+/* =========================================
+   6. MENAMPILKAN KATALOG MENU
+   Pencarian dilakukan berdasarkan nama dan deskripsi.
+   Filter kategori menyaring jenis produk.
+   ========================================= */
 
-            return `
-                <article class="menu-card">
+function tampilkanMenu() {
+  const kataKunci = elemen.pencarian.value
+    .trim()
+    .toLocaleLowerCase("id-ID");
 
-                    <div class="menu-visual" aria-hidden="true">
-                        ${menu.icon}
-                    </div>
+  const kategoriDipilih = elemen.kategori.value;
 
-                    <div class="menu-info">
+  const hasil = menu.filter(function(produk) {
+    const teksProduk =
+      (produk.nama + " " + produk.deskripsi).toLocaleLowerCase("id-ID");
 
-                        <span class="menu-category">
-                            ${menu.category}
-                        </span>
+    const cocokPencarian = teksProduk.includes(kataKunci);
 
-                        <h3>${menu.name}</h3>
+    const cocokKategori =
+      kategoriDipilih === "Semua" ||
+      produk.kategori === kategoriDipilih;
 
-                        <p class="menu-description">
-                            ${menu.description}
-                        </p>
+    return cocokPencarian && cocokKategori;
+  });
 
-                        <div class="menu-bottom">
+  // Menampilkan jumlah menu yang ditemukan.
+  elemen.infoMenu.textContent =
+    hasil.length + " menu ditemukan";
 
-                            <span class="menu-price">
-                                ${formatRupiah(menu.price)}
-                            </span>
+  // Menangani hasil pencarian yang kosong.
+  if (hasil.length === 0) {
+    elemen.daftarMenu.innerHTML = `
+      <div class="empty-state">
+        <h3>Menu tidak ditemukan</h3>
+        <p>Coba kata kunci atau kategori lainnya.</p>
+      </div>
+    `;
+    return;
+  }
 
-                            <span class="status ${
-                                menu.available
-                                    ? "available"
-                                    : "unavailable"
-                            }">
-                                ${menu.available ? "Tersedia" : "Habis"}
-                            </span>
+  // Membuat kartu untuk setiap produk.
+  elemen.daftarMenu.innerHTML = hasil.map(function(produk) {
+    const status = produk.tersedia
+      ? "Tersedia"
+      : "Menu Habis";
 
-                        </div>
+    const kelasStatus = produk.tersedia ? "" : "habis";
 
-                        ${
-                            quantity > 0
-                                ? `<p>Jumlah dipilih: ${quantity}</p>`
-                                : ""
-                        }
+    return `
+      <article class="menu-card">
+        <div class="menu-image-wrap">
+          <img
+            class="menu-image"
+            src="${aman(produk.foto)}"
+            alt="${aman(produk.nama)}"
+            loading="lazy"
+          >
 
-                        <button
-                            type="button"
-                            class="add-btn"
-                            data-add-id="${menu.id}"
-                            ${menu.available ? "" : "disabled"}
-                        >
-                            ${
-                                menu.available
-                                    ? "Tambah ke Pesanan (+)"
-                                    : "Menu Sedang Habis"
-                            }
-                        </button>
+          <span class="menu-status ${kelasStatus}">
+            ${status}
+          </span>
+        </div>
 
-                    </div>
+        <div class="menu-card-body">
+          <span class="menu-category">
+            ${aman(produk.kategori)}
+          </span>
 
-                </article>
-            `;
-        }).join("");
+          <h3>${aman(produk.nama)}</h3>
+
+          <p class="menu-description">
+            ${aman(produk.deskripsi)}
+          </p>
+
+          <div class="menu-card-bottom">
+            <span class="menu-price">
+              ${formatRupiah(produk.harga)}
+            </span>
+
+            <button
+              type="button"
+              class="add-button"
+              data-aksi="tambah"
+              data-id="${produk.id}"
+              ${produk.tersedia ? "" : "disabled"}
+            >
+              ${produk.tersedia ? "+ Tambah" : "Habis"}
+            </button>
+          </div>
+        </div>
+      </article>
+    `;
+  }).join("");
+
+  // Mengganti gambar yang gagal dimuat dengan gambar cadangan.
+  elemen.daftarMenu.querySelectorAll(".menu-image").forEach(
+    function(gambar) {
+      gambar.addEventListener("error", function() {
+        gambar.removeAttribute("src");
+        gambar.alt = "Gambar menu tidak tersedia";
+      }, { once: true });
     }
-
-    // Memperbarui jumlah hasil pencarian.
-    resultCount.textContent =
-        `${filteredMenus.length} menu ditemukan`;
+  );
 }
 
-
 /* =========================================
-   7. MENAMBAH ATAU MENGURANGI JUMLAH MENU
-   delta = 1 untuk menambah.
-   delta = -1 untuk mengurangi.
+   7. MENAMBAHKAN PRODUK KE KERANJANG
+   Menggunakan event delegation agar lebih efisien.
    ========================================= */
 
-function changeQuantity(id, delta) {
-    const menu = menus.find(item => item.id === id);
+elemen.daftarMenu.addEventListener("click", function(event) {
+  const tombol = event.target.closest("[data-aksi='tambah']");
 
-    // Memastikan menu benar-benar tersedia.
-    if (!menu || !menu.available) {
-        return;
-    }
+  if (!tombol) return;
 
-    const currentQuantity = cart[id] || 0;
-    const newQuantity = currentQuantity + delta;
+  const produk = cariProduk(tombol.dataset.id);
 
-    // Jika jumlah mencapai nol, hapus dari keranjang.
-    if (newQuantity <= 0) {
-        delete cart[id];
-    } else {
-        cart[id] = newQuantity;
-    }
+  // Memastikan produk benar-benar tersedia.
+  if (!produk || !produk.tersedia) {
+    beriNotifikasi("Maaf, menu sedang tidak tersedia.");
+    return;
+  }
 
-    // Segarkan kartu menu dan daftar pesanan.
-    renderMenus();
-    renderCart();
-}
+  // Menambah jumlah produk yang dipilih.
+  keranjang[produk.id] = (keranjang[produk.id] || 0) + 1;
 
+  simpanKeranjang();
+  tampilkanKeranjang();
+
+  beriNotifikasi(produk.nama + " ditambahkan ke keranjang.");
+});
 
 /* =========================================
-   8. MENGHITUNG DAN MENAMPILKAN PESANAN
-   Menghitung jumlah item dan total harga.
+   8. MENAMPILKAN KERANJANG DAN TOTAL HARGA
    ========================================= */
 
-function renderCart() {
-    // Mengambil menu yang jumlahnya lebih dari nol.
-    const orderedMenus = menus.filter(
-        menu => (cart[menu.id] || 0) > 0
-    );
+function tampilkanKeranjang() {
+  const pesanan = ambilPesanan();
 
-    let totalItems = 0;
-    let totalPrice = 0;
+  // Jika belum ada produk yang dipilih.
+  if (pesanan.length === 0) {
+    elemen.daftarKeranjang.innerHTML = `
+      <div class="cart-empty">
+        <strong>Keranjang masih kosong</strong>
+        <p>Silakan pilih makanan atau minuman dari katalog.</p>
+      </div>
+    `;
+  } else {
+    // Menampilkan setiap produk dalam keranjang.
+    elemen.daftarKeranjang.innerHTML = pesanan.map(function(produk) {
+      const jumlah = keranjang[produk.id];
+      const subtotalProduk = produk.harga * jumlah;
 
-    // Menjumlahkan semua kuantitas dan harga.
-    orderedMenus.forEach(menu => {
-        const quantity = cart[menu.id];
+      return `
+        <article class="cart-item">
+          <div>
+            <h3>${aman(produk.nama)}</h3>
 
-        totalItems += quantity;
-        totalPrice += menu.price * quantity;
-    });
+            <p class="cart-item-price">
+              ${formatRupiah(produk.harga)} per item
+            </p>
 
-    // Menampilkan jumlah seluruh item.
-    cartCount.textContent = totalItems;
-    summaryCount.textContent = `${totalItems} item`;
+            <p class="cart-item-subtotal">
+              ${formatRupiah(subtotalProduk)}
+            </p>
+          </div>
 
-    // Menampilkan total harga seluruh pesanan.
-    cartTotal.textContent = formatRupiah(totalPrice);
+          <div class="cart-controls">
+            <button
+              type="button"
+              class="quantity-button"
+              data-aksi="kurang"
+              data-id="${produk.id}"
+              aria-label="Kurangi ${aman(produk.nama)}"
+            >−</button>
 
-    // Menampilkan atau menyembunyikan pesan keranjang kosong.
-    cartEmpty.hidden = orderedMenus.length > 0;
-    cartItems.hidden = orderedMenus.length === 0;
+            <span class="quantity-value">${jumlah}</span>
 
-    // Tombol kosongkan aktif jika ada pesanan.
-    clearCartBtn.disabled = totalItems === 0;
+            <button
+              type="button"
+              class="quantity-button"
+              data-aksi="tambah-jumlah"
+              data-id="${produk.id}"
+              aria-label="Tambah ${aman(produk.nama)}"
+            >+</button>
 
-    // Membuat daftar item yang sedang dipesan.
-    cartItems.innerHTML = orderedMenus.map(menu => {
-        const quantity = cart[menu.id];
-        const subtotal = menu.price * quantity;
-
-        return `
-            <div class="cart-item">
-
-                <div class="cart-item-info">
-                    <h3>${menu.name}</h3>
-
-                    <p>
-                        ${formatRupiah(menu.price)} per item
-                    </p>
-                </div>
-
-                <div class="quantity-controls">
-
-                    <button
-                        type="button"
-                        class="quantity-btn"
-                        data-cart-action="decrease"
-                        data-id="${menu.id}"
-                        aria-label="Kurangi ${menu.name}"
-                    >
-                        −
-                    </button>
-
-                    <span class="quantity-number">
-                        ${quantity}
-                    </span>
-
-                    <button
-                        type="button"
-                        class="quantity-btn"
-                        data-cart-action="increase"
-                        data-id="${menu.id}"
-                        aria-label="Tambah ${menu.name}"
-                    >
-                        +
-                    </button>
-
-                </div>
-
-                <div class="cart-line-total">
-                    ${formatRupiah(subtotal)}
-                </div>
-
-            </div>
-        `;
+            <button
+              type="button"
+              class="remove-button"
+              data-aksi="hapus"
+              data-id="${produk.id}"
+            >Hapus</button>
+          </div>
+        </article>
+      `;
     }).join("");
+  }
+
+  // Memperbarui ringkasan jumlah dan harga.
+  const jumlah = hitungJumlahItem();
+  const total = hitungTotal();
+
+  elemen.badgeKeranjang.textContent = jumlah;
+  elemen.jumlahItem.textContent = jumlah + " item";
+  elemen.subtotal.textContent = formatRupiah(total);
+  elemen.totalHarga.textContent = formatRupiah(total);
+
+  // Tombol pesan dinonaktifkan jika keranjang kosong.
+  elemen.tombolPesan.disabled = jumlah === 0;
+
+  // Tombol kosongkan dinonaktifkan jika keranjang kosong.
+  elemen.kosongkan.disabled = jumlah === 0;
 }
 
-
 /* =========================================
-   9. KLIK TOMBOL KATEGORI
+   9. MENGUBAH JUMLAH DAN MENGHAPUS PRODUK
    ========================================= */
 
-categoryButtons.addEventListener("click", function(event) {
-    const button = event.target.closest("button[data-category]");
+elemen.daftarKeranjang.addEventListener("click", function(event) {
+  const tombol = event.target.closest("[data-aksi]");
 
-    if (!button) {
-        return;
+  if (!tombol) return;
+
+  const aksi = tombol.dataset.aksi;
+  const id = Number(tombol.dataset.id);
+  const produk = cariProduk(id);
+
+  if (!produk || !keranjang[id]) return;
+
+  if (aksi === "kurang") {
+    keranjang[id]--;
+
+    // Menghapus produk jika jumlahnya menjadi nol.
+    if (keranjang[id] <= 0) {
+      delete keranjang[id];
+    }
+  }
+
+  if (aksi === "tambah-jumlah") {
+    // Tidak mengizinkan penambahan produk yang sudah habis.
+    if (!produk.tersedia) {
+      beriNotifikasi("Menu tersebut sedang habis.");
+      return;
     }
 
-    activeCategory = button.dataset.category;
+    keranjang[id]++;
+  }
 
-    renderCategories();
-    renderMenus();
+  if (aksi === "hapus") {
+    delete keranjang[id];
+    beriNotifikasi(produk.nama + " dihapus dari keranjang.");
+  }
+
+  simpanKeranjang();
+  tampilkanKeranjang();
 });
 
-
 /* =========================================
-   10. KLIK TOMBOL TAMBAH KE PESANAN
+   10. MENGOSONGKAN KERANJANG
    ========================================= */
 
-menuGrid.addEventListener("click", function(event) {
-    const button = event.target.closest("button[data-add-id]");
+elemen.kosongkan.addEventListener("click", function() {
+  // Menghapus seluruh isi keranjang.
+  Object.keys(keranjang).forEach(function(id) {
+    delete keranjang[id];
+  });
 
-    if (!button) {
-        return;
-    }
+  simpanKeranjang();
+  tampilkanKeranjang();
 
-    const id = Number(button.dataset.addId);
-
-    changeQuantity(id, 1);
+  beriNotifikasi("Keranjang berhasil dikosongkan.");
 });
 
-
 /* =========================================
-   11. KLIK TOMBOL + ATAU - DI KERANJANG
+   11. PENCARIAN DAN FILTER KATEGORI
    ========================================= */
 
-cartItems.addEventListener("click", function(event) {
-    const button = event.target.closest("button[data-cart-action]");
+// Menu diperbarui ketika pengguna mengetik.
+elemen.pencarian.addEventListener("input", tampilkanMenu);
 
-    if (!button) {
-        return;
-    }
-
-    const id = Number(button.dataset.id);
-    const action = button.dataset.cartAction;
-
-    if (action === "increase") {
-        changeQuantity(id, 1);
-    }
-
-    if (action === "decrease") {
-        changeQuantity(id, -1);
-    }
-});
-
+// Menu diperbarui ketika kategori diganti.
+elemen.kategori.addEventListener("change", tampilkanMenu);
 
 /* =========================================
-   12. PENCARIAN MENU
+   12. PENYIMPANAN KERANJANG DI BROWSER
+   localStorage menyimpan data di perangkat yang sama.
+   Data ini bukan database bersama untuk seluruh pelanggan.
    ========================================= */
 
-searchInput.addEventListener("input", renderMenus);
+const KUNCI_PENYIMPANAN = "digimenu_keranjang_v1";
 
+function simpanKeranjang() {
+  try {
+    localStorage.setItem(
+      KUNCI_PENYIMPANAN,
+      JSON.stringify(keranjang)
+    );
+  } catch (error) {
+    // Website tetap dapat digunakan meskipun penyimpanan gagal.
+    console.warn("Keranjang tidak dapat disimpan di browser.");
+  }
+}
 
-/* =========================================
-   13. MENGOSONGKAN SEMUA PESANAN
-   ========================================= */
+function muatKeranjang() {
+  try {
+    const data = localStorage.getItem(KUNCI_PENYIMPANAN);
 
-clearCartBtn.addEventListener("click", function() {
-    // Menghapus semua data jumlah pesanan.
-    Object.keys(cart).forEach(id => {
-        delete cart[id];
+    if (!data) return;
+
+    const tersimpan = JSON.parse(data);
+
+    // Pastikan data yang dipulihkan berbentuk objek.
+    if (
+      !tersimpan ||
+      typeof tersimpan !== "object" ||
+      Array.isArray(tersimpan)
+    ) {
+      return;
+    }
+
+    Object.entries(tersimpan).forEach(function([id, jumlah]) {
+      const produk = cariProduk(id);
+
+      // Hanya memulihkan ID yang valid dan produk yang tersedia.
+      if (
+        produk &&
+        produk.tersedia &&
+        Number.isSafeInteger(jumlah) &&
+        jumlah > 0 &&
+        jumlah <= 99
+      ) {
+        keranjang[produk.id] = jumlah;
+      }
     });
-
-    // Memperbarui tampilan setelah keranjang kosong.
-    renderMenus();
-    renderCart();
-});
-
+  } catch (error) {
+    console.warn("Data keranjang lama tidak dapat dibaca.");
+  }
+}
 
 /* =========================================
-   14. MENJALANKAN WEBSITE PERTAMA KALI
+   13. MEMBUKA KERANJANG DARI NAVIGASI
    ========================================= */
 
-renderCategories();
-renderMenus();
-renderCart();
+elemen.bukaKeranjang.addEventListener("click", function() {
+  document.getElementById("keranjang").scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+});
+
+/* =========================================
+   14. KONFIRMASI PESANAN VIA WHATSAPP
+   Pelanggan tetap perlu memeriksa dan mengirim pesan.
+   ========================================= */
+
+function nomorWhatsAppValid(nomor) {
+  // Nomor harus terdiri dari 8 sampai 15 digit
+  // dan dimulai dengan kode negara yang sesuai.
+  return /^[1-9]\d{7,14}$/.test(nomor);
+}
+
+elemen.tombolPesan.addEventListener("click", function() {
+  const pesanan = ambilPesanan();
+
+  if (pesanan.length === 0) {
+    beriNotifikasi("Pilih menu terlebih dahulu.");
+    return;
+  }
+
+  if (!nomorWhatsAppValid(KONFIGURASI.nomorWhatsApp)) {
+    beriNotifikasi("Nomor WhatsApp cafe belum benar.");
+    return;
+  }
+
+  // Membuat rincian pesanan.
+  const rincian = pesanan.map(function(produk) {
+    const jumlah = keranjang[produk.id];
+
+    return (
+      "- " + produk.nama +
+      " x" + jumlah +
+      " = " + formatRupiah(produk.harga * jumlah)
+    );
+  });
+
+  const total = hitungTotal();
+
+  // Menyusun pesan yang akan dibuka di WhatsApp.
+  const pesan = [
+    "Halo " + KONFIGURASI.namaCafe + ", saya ingin memesan:",
+    "",
+    ...rincian,
+    "",
+    "Jumlah item: " + hitungJumlahItem(),
+    "Total: " + formatRupiah(total),
+    "",
+    "Mohon konfirmasi pesanan saya. Terima kasih."
+  ].join("\n");
+
+  // Mengubah pesan agar aman digunakan dalam URL.
+  const tautan =
+    "https://wa.me/" +
+    KONFIGURASI.nomorWhatsApp +
+    "?text=" +
+    encodeURIComponent(pesan);
+
+  // Membuka WhatsApp di tab baru.
+  // Pelanggan harus menekan tombol Kirim di WhatsApp.
+  const jendela = window.open(
+    tautan,
+    "_blank",
+    "noopener,noreferrer"
+  );
+
+  // Jika browser memblokir tab baru, tampilkan tautan alternatif.
+  if (!jendela) {
+    beriNotifikasi(
+      "WhatsApp tidak terbuka. Izinkan tab baru di browser."
+    );
+  }
+});
+
+/* =========================================
+   15. INISIALISASI WEBSITE
+   Dijalankan saat file JavaScript pertama kali dibaca.
+   ========================================= */
+
+// Mengisi tahun secara otomatis.
+elemen.tahun.textContent = new Date().getFullYear();
+
+// Memulihkan keranjang yang tersimpan di browser.
+muatKeranjang();
+
+// Menampilkan katalog dan isi keranjang.
+tampilkanMenu();
+tampilkanKeranjang();
