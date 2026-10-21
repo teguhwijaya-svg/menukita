@@ -1,1 +1,75 @@
 
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MenuKita - Menu Digital</title>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+    <header class="header">
+        <div class="container header-inner">
+            <a href="#" class="logo">Menu<span>Kita.</span></a>
+            <p>Menu digital kafe dan restoran</p>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <section class="hero">
+            <p class="eyebrow">SELAMAT DATANG</p>
+            <h1>Temukan Menu Favoritmu</h1>
+            <p>
+                Lihat pilihan makanan dan minuman dengan mudah.
+                Praktis, cepat, dan tanpa aplikasi tambahan.
+            </p>
+        </section>
+
+        <section class="menu-section">
+            <div class="section-heading">
+                <h2>Daftar Menu</h2>
+                <p>Pilih menu sesuai seleramu.</p>
+            </div>
+
+            <label for="searchInput" class="visually-hidden">
+                Cari menu
+            </label>
+
+            <input
+                type="search"
+                id="searchInput"
+                class="search-input"
+                placeholder="Cari makanan atau minuman..."
+                autocomplete="off"
+            >
+
+            <div
+                id="categoryButtons"
+                class="category-buttons"
+                aria-label="Filter kategori menu">
+            </div>
+
+            <div id="menuGrid" class="menu-grid"></div>
+
+            <p id="resultCount" class="result-count"
+               aria-live="polite"></p>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <h3>MenuKita.</h3>
+            <p>Menu digital yang praktis untuk semua.</p>
+            <p>&copy; 2026 MenuKita</p>
+        </div>
+    </footer>
+
+</body>
+</html>
+
