@@ -56,6 +56,14 @@ const menus = [
         icon: "🍵",
         available: true
     }
+  {
+    name: "Ayam Geprek",
+    category: "Makanan Berat",
+    price: 17000,
+    description: "Ayam geprek dengan sambal pedas.",
+    icon: "🍗",
+    available: true
+},
 ];
 
 // Mengambil bagian HTML yang akan digunakan
